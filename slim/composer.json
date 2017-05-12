@@ -1,0 +1,13 @@
+{
+    "name": "vendor/slim",
+    "description": "Description of project slim.",
+    "authors": [
+        {
+            "name": "Julio Simon",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        "slim/slim-skeleton": "dev-master"
+    }
+}

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:toatech:agent" name="toa_agent_interface" targetNamespace="urn:toatech:agent">
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:toatech:agent">
+
+            <!-- skill -->
+            <xsd:complexType name="skill">
+                <xsd:sequence>
+                    <xsd:element name="nombre"    type="xsd:string" />
+                    <xsd:element name="id"    type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <!-- skills -->
+            <xsd:complexType name="skills">
+                <xsd:sequence>
+                    <xsd:element name="skill"    type="tns:skill" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="employee">
+              <xsd:sequence>
+                    <xsd:element name="id"    type="xsd:string"/>
+                    <xsd:element name="isOnline"    type="xsd:string"  />
+                    <xsd:element name="salary"     type="xsd:string"/>
+                    <xsd:element name="age"  type="xsd:int"  />
+                    <xsd:element name="position"  type="xsd:string"  />
+                    <xsd:element name="name"     type="xsd:string"/>
+                    <xsd:element name="gender"     type="xsd:string"/>
+                    <xsd:element name="email"     type="xsd:string"/>
+                    <xsd:element name="phone"        type="xsd:string"/>
+                    <xsd:element name="address"        type="xsd:string"/>
+                    <xsd:element name="skills" type="tns:skills" />
+              </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="employees">
+                <xsd:sequence>
+                  <xsd:element  name="employee"  type="tns:employee"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+
+            <xsd:complexType name="obtener_t">
+                <xsd:sequence>
+                    <xsd:element name="minimo" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="maximo" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+
+            <!--  ELEMENTS  -->
+            <xsd:element name="obtener" type="tns:obtener_t"/>
+            <xsd:element name="obtener_response" type="tns:employees"/>
+
+
+        </xsd:schema>
+    </types>
+
+    <message name="obtener_m">
+        <part name="parameters" element="tns:obtener"/>
+    </message>
+    <message name="obtener_response_m">
+        <part name="parameters" type="tns:obtener_response" />
+    </message>
+
+    <portType name="agent_port_type">
+        <operation name="obtener">
+            <input message="tns:obtener_m"/>
+            <output message="tns:obtener_response_m"/>
+        </operation>
+    </portType>
+
+    <binding name="agent_binding" type="tns:agent_port_type">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="obtener">
+            <soap:operation soapAction="agent_service/obtener" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="agent_service">
+        <port binding="tns:agent_binding" name="agent_interface">
+            <soap:address location="http://php_soap_server/employees"/>
+        </port>
+    </service>
+
+</definitions>
